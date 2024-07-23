@@ -1,0 +1,55 @@
+{% extends 'navbar.html' %}
+
+{%block content %}
+
+
+{%load staticfiles %}
+
+<br><br><br><br>
+
+<div class="container">
+
+  <div class="row shadow p-3 mb-5 bg-white rounded">
+    <div class="col-md-12">
+      <h3 class=" text-center">Blogs</h3>
+      <hr class="bg-info col-md-10">
+    </div>
+    {% for blog in blogsInfo.all %}
+    <div class="col-md-6">
+      <div class="card border border-info ">
+        <!--style="width: 18rem;">-->
+        <div class="card-body">
+          <h5 class="card-title text-center">{{ blog.title }}</h5>
+          <hr class="bg-info col-md-8">
+          <!-- <h6 class="card-subtitle mb-2 text-muted">Helps to organise event</h6> -->
+          <p class="card-text"> Blog Category &nbsp;&nbsp;: {{ blog.blogCategory }}</p>
+          <p class="card-text"> Description : </p>
+          <p class="card-text"> {{ blog.summary }}</p>
+          <p class="card-text"> Images: </p>
+          <div class="row">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="media/images/blogsImages/{{blog.imageFirst}}" height="200" width="200">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="media/images/blogsImages/{{ blog.imageSecond }} " height="200" width="200">
+          </div>
+          <br>
+          <p class="card-text"> Refrence Link &nbsp; : {{ blog.refrenceLinks }} </p>
+           <div class="row">
+           <center>
+            <button class=" btn">
+              <a href="blogsDetail" class="btn btn-dark btn-outline-info">
+                Edit Blog</a>
+            </button>
+            <button class=" btn">
+              <a href="blogsDetail" class="btn btn-dark btn-outline-info" >
+                Delete Blog</a>
+            </button>
+            </center>
+            </div>
+        </div>
+      </div>
+      <br>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

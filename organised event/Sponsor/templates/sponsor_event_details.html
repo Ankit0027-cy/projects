@@ -1,0 +1,176 @@
+{% extends 'nav-bar-sponsor.html' %}
+
+{%block content %}
+
+{%load staticfiles %}
+
+<br><br><br><br>
+
+<div class="container">
+	<div class="col-md-12">
+		<div class="card border border-primary ">
+			<div class="card-body ">
+				{% for event in events.all %}
+				<h3 class="text-center"> {{ event.event_title }}</h3>
+				<hr class="bg-primary col-md-8">
+
+				<p class="card-text text-center" style="margin-left: 0em;">From: {{ event.event_startdate }} , To:
+					{{ event.event_enddate }} </p>
+				<img src="/media/images/event_poster/{{ event.event_poster }}" height="20%" width="50%">
+				<style>
+					p {
+						margin-left: 13em;
+						margin-right: 10em;
+					}
+
+					img {
+						margin-left: 13em;
+					}
+				</style>
+				<br><br>
+				<p class="card-text"> Event Category &nbsp;&nbsp;&nbsp;: {{ event.event_category}} </p>
+				<p class="card-text"> Organised By &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ event.org_name}} </p>
+				<p class="card-text"> Organiser Email &nbsp;&nbsp;: {{ event.org_email}} </p>
+				<p class="card-text"> Contact Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ event.org_contact_person }}
+				</p>
+				<p class="card-text"> Contact Number &nbsp;: {{ event.org_mobile }} </p>
+				<p class="card-text">Description : {{ event.summary }} </p>
+				<hr class="bg-primary col-md-8">
+				{% endfor %}
+
+				{% for inf in info.all %}
+				<h3 class="text-center">Event Details</h3>
+				<hr class="bg-primary col-md-8">
+				<p class="card-text"> Expected number of team
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+					{{ inf.expected_participant }} </p>
+				<p class="card-text"> Expected number of team members &nbsp;&nbsp;: {{ inf.no_participant }} </p>
+				<p class="card-text"> Event Level
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+					{{ inf.event_level }} </p>
+				<p class="card-text"> Eligiblity
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+					{{ inf.eligibility }} </p>
+				<p class="card-text"> Prerequsite : {{ inf.prerequisite }} </p>
+				<p class="card-text"> Facilities : {{ inf.facility }} </p>
+				<hr class="bg-primary col-md-8">
+				{% endfor %}
+
+				{% for sps in spnsr.all %}
+				<h3 class="text-center">Sponsership Details</h3>
+				<hr class="bg-primary col-md-8">
+				<p class="card-text"> Type : {{ sps.platinum_sponsor }} </p>
+				<p class="card-text"> Faclities : {{ sps.f_platinum }} </p>
+				<p class="card-text"> Expected Amount : {{ sps.ex_platinum }} </p>
+				<p class="card-text"> Type : {{ sps.gold_sponsor }} </p>
+				<p class="card-text"> Faclities : {{ sps.f_gold }} </p>
+				<p class="card-text"> Expected Amount : {{ sps.ex_gold }} </p>
+				<p class="card-text"> Type : {{ sps.silver_sponsor }} </p>
+				<p class="card-text"> Faclities : {{ sps.f_silver }} </p>
+				<p class="card-text"> Expected Amount : {{ sps.ex_silver }} </p>
+				<hr class="bg-primary col-md-8">
+				{% endfor %}
+
+				{% for ven in venue.all %}
+				<h3 class="text-center">Venue Details</h3>
+				<hr class="bg-primary col-md-8">
+				<p class="card-text"> Venue Name : {{ ven.event_venue_name }} </p>
+				<p class="card-text"> Venue Address : {{ ven.event_venue_addr }} </p>
+				<input type="text" name="latitude" id="event_latitude" value="{{ ven.event_latitude }}" hidden>
+				<input type="hidden" name="longitude" id="event_longitude" value="{{ ven.event_longitude}}" hidden>
+				<div class="col-md-6" style="width: 35rem; height: 32rem;">
+					<style>
+						#map {
+							height: 90%;
+							width: 150%;
+							margin-left: 10em;
+						}
+
+						html,
+						body {
+							height: 90%;
+							margin: 0;
+							padding: 0;
+						}
+					</style>
+					<div id="map"></div>
+					<script>
+						function initMap() {
+
+							let lati = document.getElementById('event_latitude').value;
+							let lngi = document.getElementById('event_longitude').value;
+							lati = parseFloat(lati);
+							lngi = parseFloat(lngi);
+
+							var uluru = { lat: lati, lng: lngi };
+							var main_url = "https://cdn0.iconfinder.com/data/icons/map-and-navigation-2-1/48/100-512.png";
+
+							var map = new google.maps.Map(document.getElementById('map'), {
+								zoom: 14,
+								center: uluru,
+								gestureHandling: 'cooperative',
+								mapTypeId: 'satellite',
+								heading: 90,
+								tilt: 45
+
+							});
+							map.setTilt(45);
+							function rotate90() {
+								var heading = map.getHeading() || 0;
+								map.setHeading(heading + 90);
+							}
+
+							function autoRotate() {
+								// Determine if we're showing aerial imagery.
+								if (map.getTilt() !== 0) {
+									window.setInterval(rotate90, 3000);
+								}
+							}
+							var icon = {
+								url: main_url, // url
+								scaledSize: new google.maps.Size(50, 50), // scaled size
+							};
+							// The marker, positioned at Uluru
+							var marker = new google.maps.Marker({
+								position: uluru,
+								map: map,
+								icon: icon,
+								title: 'Click to zoom'
+							});
+
+							map.addListener('center_changed', function () {
+								// 3 seconds after the center of the map has changed, pan back to the
+								// marker.
+								window.setTimeout(function () {
+									map.panTo(marker.getPosition());
+								}, 3000);
+							});
+
+							marker.addListener('click', function () {
+								map.setZoom(20);
+								map.setCenter(marker.getPosition());
+							});
+							var panorama = new google.maps.StreetViewPanorama(
+								document.getElementById('pano'), {
+									position: uluru,
+									pov: {
+										heading: 34,
+										pitch: 10
+									}
+								});
+							map.setStreetView(panorama);
+						}
+					</script>
+					<script async defer
+						src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6jnD6FLQkeGLK05JfSYbOZLXkenB_dGA&callback=initMap"></script>
+				</div>
+				<hr class="bg-primary col-md-8">
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	<hr class="bg-primary col-md-8">
+</div>
+
+
+{% endblock %}

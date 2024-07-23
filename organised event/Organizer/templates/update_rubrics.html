@@ -1,0 +1,230 @@
+{% extends 'navbar.html' %}
+
+{%block content %}
+
+
+{%load staticfiles %}
+
+<br><br><br><br>
+
+<div class="container">
+
+  <div class="row shadow p-3 mb-5 bg-white rounded">
+    <div class="col-md-12">
+      <h3 class=" text-center">Event Details</h3>
+      <hr class="bg-info col-md-10">
+    </div>
+
+    {%  for event in events.all  %}
+
+    <div class="col-md-6">
+      <div class="card border border-info ">
+        <!--style="width: 18rem;">-->
+        <div class="card-body">
+          <h5 class="card-title text-center">Event Title : {{ event.event }}</h5>
+          <hr class="bg-info col-md-8">
+          <!-- <h6 class="card-subtitle mb-2 text-muted">Helps to organise event</h6> -->
+          <p class="card-text"> Expected number of teams &nbsp;&nbsp;: {{ event.expected_participant}} </p>
+          <p class="card-text"> Participants per team
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ event.no_participant}} </p>
+          <p class="card-text"> Event Level
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+            {{ event.event_level }} </p>
+          <p class="card-text"> Eligibility
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+            {{ event.eligibility }} </p>
+          <p class="card-text"> Prerequisite
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+            {{ event.prerequisite }} </p>
+          <p class="card-text"> Facility
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+            {{ event.facility }}</p>
+          <!-- <p class="card-text"> Event Detail Docs : {{ event.event_detail_docs }}</p> -->
+          <div class="row">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class=" btn"><a href="" class="btn btn-dark btn-outline-info" data-toggle="modal"
+                data-target="#view{{event.id}}">
+                View</a>
+            </button>
+            <button class=" btn"> <a href="" class="btn btn-dark btn-outline-info" data-toggle="modal"
+                data-target="#edit{{event.id}}">
+                Edit</a>
+            </button>
+            <button class=" btn"> <a href="" class="btn btn-dark btn-outline-info" data-toggle="modal"
+                data-target="#delete{{event.id}}">
+                Delete</a>
+            </button>
+            <button class=" btn">
+              <a href="/media/images/event_details_docs/{{event.event_detail_docs}}"
+                class="btn btn-dark btn-outline-info" download>Download Brochure</a>
+            </button>
+          </div>
+        </div>
+
+        <div class="modal fade" id="edit{{event.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header bg-dark">
+                <h5 class="modal-title text-info" id="exampleModalLabel"> {{ event.event}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                {% if error %}
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                  <strong> {{error}}</strong>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                {%endif%}
+                <center>
+
+                  <form action="{% url 'evenDetailsUpdate' event.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label for="exampleFormControlInput1">Event Title</label>
+                      <input type="text" class="form-control" id="exampleFormControlInput1" name="event_title"
+                        value="{{event.event}}" placeholder="Event Title">
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlSelect1">Expected Teams</label>
+                      <input type="text" class="form-control" id="exampleFormControlInput1" name="expected_participant"
+                        value="{{event.expected_participant}} " placeholder="Event Title">
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlSelect2">Team Member</label>
+                      <input type="text" class="form-control" id="exampleFormControlInput1" name="no_participant"
+                        value="{{event.no_participant}} " placeholder="Organisation Name">
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlTextarea1">Event Level</label>
+                      <select name="event_level" class="form-control   border border-info">
+                        <option class="form-control border border-info">Selected Event {{event.event_level}}</option>
+                        <option class="form-control border border-info">Zonal</option>
+                        <option class="form-control border border-info">State </option>
+                        <option class="form-control border border-info"> National</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlInput1">Eligibility</label>
+                      <input type="text" class="form-control" id="exampleFormControlInput1" name="eligibility"
+                        value="{{event.eligibility}} " placeholder="Organisation Mobile Number">
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlInput1">Event Prerequisite</label>
+                      <input type="text" class="form-control" id="exampleFormControlInput1" name="prerequisite"
+                        value="{{event.prerequisite}} " placeholder="Contact Person Name">
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlInput1">Event Facilities</label>
+                      <input type="text" class="form-control" id="exampleFormControlInput1" name="facilities"
+                        value="  {{event.facility}}" placeholder="name@example.com">
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlInput1">Event Details Document </label>
+                      <input type="file" class="form-control" id="exampleFormControlInput1" name="event_detail_docs"
+                        placeholder="name@example.com">
+                      <label> {{event.event_detail_docs}} </label>
+                    </div>
+                    <div class="form-group">
+                      <input type="submit" class="btn btn-outline-info bg-dark" name="Submit"
+                        aria-describedby="emailHelp" value="Submit">
+                    </div>
+                  </form>
+                </center>
+              </div>
+              <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-dark btn-outline-info" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="delete{{event.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header bg-dark">
+                <h5 class="modal-title text-info" id="exampleModalLabel"> {{ event.event}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <form action="{% url 'evenDetailsdelete' event.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group text-center">
+                      <label for="exampleFormControlInput1">Event Title : {{event.event}} </label>
+                    </div>
+                    <div class="form-group text-center">
+                      <input type="submit" class="btn btn-outline-info bg-dark" name="Submit"
+                        aria-describedby="emailHelp" value="Delete">
+                    </div>
+                  </form>
+              </div>
+              <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-dark btn-outline-info" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="view{{event.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header bg-dark">
+                <h5 class="modal-title text-info" id="exampleModalLabel"> {{ event.event}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">Event Title : {{event.event}} </label>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">Expected Number of Participants :
+                    {{event.expected_participant}}</label>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlSelect2">Total Number of Teams : {{event.no_participant}} </label>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlTextarea1">Event Level : {{event.event_level}} </label>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">Eligibility : {{event.eligibility}} </label>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">Event Prerequisite : {{event.prerequisite}} </label>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">Event Facilities : {{event.facility}} </label>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">Event Details Document : <a
+                      href="/media/images/event_details_docs/{{event.event_detail_docs}}"
+                      download>{{event.event_detail_docs}}</a> </label>
+                </div>
+              </div>
+              <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-dark btn-outline-info" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+    </div>
+
+    {% endfor %}
+  </div>
+</div>
+
+<hr class="bg-info col-md-8">
+<!-- Modal -->
+
+{% endblock %}

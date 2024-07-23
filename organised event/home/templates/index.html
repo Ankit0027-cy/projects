@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{%load staticfiles %}
+
+{% for sl in slide.all %}
+
+
+<br><br>
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class=" carousel-item active" data-interval="500">
+      <img src="{{sl.slide1.url}}" height="800" class="d-block w-100" alt="slider data not  uploaded">
+      <div class="carousel-caption d-none d-md-block">
+        <h1> Tech Event</h1>
+        <!-- <p></p> -->
+      </div>
+    </div>
+    <div class="carousel-item" data-interval="500">
+      <img src="{{sl.slide2.url}}" height="800" class="d-block w-100" alt="slider data not  uploaded">
+      <div class="carousel-caption d-none d-md-block">
+        <h1> Welcome you for the Tech event </h1>
+        <!-- <p>...</p> -->
+      </div>
+    </div>
+    <div class="carousel-item" data-interval="500">
+      <img src="{{sl.slide3.url}}" height="800" class="d-block w-100" alt="slider data not  uploaded">
+      <div class="carousel-caption d-none d-md-block">
+        <h1> Going Good</h1>
+        <!-- <p>...</p> -->
+      </div>
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+
+{% endfor %}
+
+<hr class="bg-info col-md-10">
+
+<section id="Events">
+  <div class="container col-md-10">
+    <div class="text-center">
+      <h2> UpComing Events</h2>
+      <hr class="bg-info col-md-8">
+    </div>
+    <div class="row shadow p-3 mb-5 bg-white rounded">
+      {% for event in events %}
+      <div class="col-md-4">
+        <div class="card border-info mb-3" style="width: 18rem;">
+          <img src="media/images/event_poster/{{ event.event_poster }}" class="card-img-top" height="50%" width="100%">
+          <h5 class="card-title text-info text-center">{{ event.event_title }}</h5>
+          <br>
+          <div class="card-body text-info">
+            <h5 class="card-title">{{ event.org_name }}</h5>
+            <p class="card-text">{{ event.summary }} <a class=" text-info" href="{% url 'eventDetails' event.id %}">
+                Read More
+              </a></p>
+            <button class=" btn">
+              {% if event.event_enddate  %}
+              <div class="float-left">
+                <p class="card-text text-info">Event Start: {{ event.event_startdate }}</p>
+              </div>
+              <div class="float-right">
+                <a class=" bg-dark btn btn-outline-info" href="{% url 'accounts' %}">Participate </a>
+              </div>
+              {% endif %}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+    <hr class="bg-info col-md-8">
+  </div>
+</section>
+
+
+<section id="partners">
+  <div class="container col-md-10">
+    <div class="text-center">
+      <h2> Our Partners</h2>
+      <hr class="bg-info col-md-8">
+    </div>
+    <div class="row shadow p-3 mb-5 bg-white rounded">
+      {%  for partner in ourPartner.all %}
+
+      <div class="col-md-4">
+        <div class="card border-info  mb-3">
+          <img src="{{ partner.orgLogo.url  }}" class="card-img-top " height="180">
+          <h5 class="card-title text-info text-center"><a href="{{ partner.maplocation }}"
+              class="text-info">{{ partner.organisationName }}</a></h5>
+
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+<section id="partners">
+  <div class="container col-md-10">
+    <div class="text-center">
+      <h2> Community</h2>
+      <hr class="bg-info col-md-12">
+    </div>
+    <div class="row shadow p-3 mb-5 bg-white rounded">
+
+      <!-- card rounded-pill border-info -->
+      <div class="col-md-4">
+        <div class=" mr-auto  mb-3" style="width: 25rem;">
+          <img src="media/images/Comunitybanners/participant.jpg" class="rounded-pill" height="125" width="400">
+          <h5 class="card-title text-info text-center">Participant Members</h5>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class=" mr-auto mb-3" style="width: 25rem;">
+          <img src="media/images/Comunitybanners/participant.jpg" class="rounded-pill" height="125" width="400">
+          <h5 class="card-title text-info text-center">Organiser Members</h5>
+        </div>
+      </div>
+        <div class="col-md-4">
+          <div class=" mr-auto mb-3" style="width: 25rem;">
+            <img src="media/images/Comunitybanners/participant.jpg" class="rounded-pill" height="125" width="400" >
+            <h5 class="card-title text-info text-center">Sponsors Members</h5>
+
+          </div>
+        </div>
+    <hr class="bg-info col-md-8">
+  </div>
+</div>
+</section>
+
+
+
+
+
+
+{% endblock %}
